@@ -37,21 +37,28 @@ public class NFCActivity extends AppCompatActivity {
         //调用工具方法，读取到的NFC数据
         String str = "";
         String id = "";
+        String data = "";
 
         if (dao == null) {
             dao = new NfcDao(this);
         }
 
         try {
-            str = dao.readFromTag(intent);
-            id = dao.readIdFromTag(intent);
+            // str = dao.readFromTag(intent);
+            // id = dao.readIdFromTag(intent);
+            data = dao.readTag(intent);
 
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
+
+        Log.e("NFCActivity", data);
+
+
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
         Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
     }
 
     /**
