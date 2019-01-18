@@ -234,7 +234,12 @@ public class NfcDao {
                     + "B\n";
             for (int i = 0; i < sectorCount; i++) {
                 //验证当前扇区的KeyA密码，返回值为ture或false。
-                auth = mfc.authenticateSectorWithKeyA(i, MifareClassic.KEY_DEFAULT);
+
+                String key1 = "hdypdd";
+                byte[] key11 = key1.getBytes();
+
+                //auth = mfc.authenticateSectorWithKeyA(i, MifareClassic.KEY_DEFAULT);
+                auth = mfc.authenticateSectorWithKeyA(i, key11);
                 int bCount;
                 int bIndex;
                 if (auth) {
@@ -247,11 +252,11 @@ public class NfcDao {
                         //metaInfo += "Block " + bIndex + " : " + printHexBinary(bytes) + "\n";
                         // bIndex++;
 
-                     //   Log.e("readTag", hexStringToStr(ByteArrayToHexString(bytes)));
-                       // Log.e("readTag1", hexStringToStr(ByteArrayToHexString(bytes).replace("00", "")));
+                        //   Log.e("readTag", hexStringToStr(ByteArrayToHexString(bytes)));
+                        // Log.e("readTag1", hexStringToStr(ByteArrayToHexString(bytes).replace("00", "")));
 
 
-                        metaInfo += "Block " + bIndex + " : " +hexStringToStr(ByteArrayToHexString(bytes))  + "\n";
+                        metaInfo += "Block " + bIndex + " : " + hexStringToStr(ByteArrayToHexString(bytes)) + "\n";
                         bIndex++;
                     }
                 } else {
