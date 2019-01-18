@@ -57,7 +57,9 @@ public class NfcDao {
      * 初始化nfc设置
      */
     public static void NfcInit(Activity activity) {
-        mPendingIntent = PendingIntent.getActivity(activity, 0, new Intent(activity, activity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        mPendingIntent = PendingIntent.getActivity(activity, 0,
+                new Intent(activity, activity.getClass())
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         IntentFilter filter2 = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter filter3 = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);

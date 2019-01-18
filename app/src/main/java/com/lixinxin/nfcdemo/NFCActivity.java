@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 
@@ -26,13 +25,14 @@ public class NFCActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mTvView = findViewById(R.id.nfc_activity_tv_info);
+        mTvView = findViewById(R.id.tv);
     }
 
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        mTvView.setText("");
         //当该Activity接收到NFC标签时，运行该方法
         //调用工具方法，读取到的NFC数据
         String str = "";
@@ -58,7 +58,9 @@ public class NFCActivity extends AppCompatActivity {
 
       //  Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
       //  Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+        mTvView.setText(data);
+
     }
 
     /**
