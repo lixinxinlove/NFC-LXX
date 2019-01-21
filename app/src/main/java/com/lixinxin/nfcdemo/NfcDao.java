@@ -21,6 +21,9 @@ import java.util.Locale;
 
 public class NfcDao {
 
+
+    private static final int SECTOR = 4;
+
     private static final String LOG_TAG = "NfcDao";
 
     //nfc
@@ -59,7 +62,7 @@ public class NfcDao {
     public static void NfcInit(Activity activity) {
         mPendingIntent = PendingIntent.getActivity(activity, 0,
                 new Intent(activity, activity.getClass())
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         IntentFilter filter2 = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter filter3 = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
@@ -202,6 +205,55 @@ public class NfcDao {
     }
 
 
+    /**
+     * 读取数据
+     *
+     * @param intent
+     * @return
+     */
+    public static String readUserInfo(Intent intent) {
+        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        if (tag == null) {
+            return "";
+        }
+        MifareClassic mfc = MifareClassic.get(tag);
+        boolean auth = false;
+        try {
+            mfc.connect();
+            String userInfo = "";
+            int bCount = mfc.getBlockCountInSector(SECTOR);//获得当前扇区的所包含块的数量；
+            int bIndex = mfc.sectorToBlock(SECTOR);//当前扇区的第1块的块号；
+            String key1 = "hdypdd";
+            byte[] key11 = key1.getBytes();
+            auth = mfc.authenticateSectorWithKeyA(SECTOR, key11);
+
+            if (auth) {
+                for (int i = 0; i < bCount - 1; i++) {
+                    byte[] bytes = mfc.readBlock(bIndex);
+                    userInfo += hexStringToStr(ByteArrayToHexString(bytes)) + ":";
+                    bIndex++;
+                }
+            } else {
+                Log.e("LOG_TAG", "密码错误");
+            }
+
+            Log.e("LOG_TAG", userInfo);
+
+            return userInfo;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (mfc != null) {
+                try {
+                    mfc.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return null;
+    }
+
+
     public static String readTag(Intent intent) {
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if (tag == null) {
@@ -256,8 +308,6 @@ public class NfcDao {
 
                         //   Log.e("readTag", hexStringToStr(ByteArrayToHexString(bytes)));
                         // Log.e("readTag1", hexStringToStr(ByteArrayToHexString(bytes).replace("00", "")));
-
-
                         metaInfo += "Block " + bIndex + " : " + hexStringToStr(ByteArrayToHexString(bytes)) + "\n";
                         bIndex++;
                     }

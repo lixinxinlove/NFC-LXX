@@ -38,6 +38,7 @@ public class NFCActivity extends AppCompatActivity {
         String str = "";
         String id = "";
         String data = "";
+        String data1 = "";
 
         if (dao == null) {
             dao = new NfcDao(this);
@@ -47,6 +48,7 @@ public class NFCActivity extends AppCompatActivity {
             // str = dao.readFromTag(intent);
             // id = dao.readIdFromTag(intent);
             data = dao.readTag(intent);
+            data1 = dao.readUserInfo(intent);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,11 +58,10 @@ public class NFCActivity extends AppCompatActivity {
         //Log.e("NFCActivity", data);
 
 
-      //  Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-      //  Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
-      //  Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
         mTvView.setText(data);
-
     }
 
     /**
