@@ -6,10 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
-import java.io.UnsupportedEncodingException;
-
 public class NFCActivity extends AppCompatActivity {
-
 
     private NfcDao dao = null;
 
@@ -48,14 +45,17 @@ public class NFCActivity extends AppCompatActivity {
             // str = dao.readFromTag(intent);
             // id = dao.readIdFromTag(intent);
             data = dao.readTag(intent);
-            data1 = dao.readUserInfo(intent);
+
+            //dao.weTag(intent);
+            //dao.writeUserInfo(intent);
+            //data1 = dao.readUserInfo(intent);
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
-        //Log.e("NFCActivity", data);
+        Log.e("NFCActivity", data1);
 
 
         //  Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
@@ -77,16 +77,16 @@ public class NFCActivity extends AppCompatActivity {
         NfcDao.mNfcAdapter.enableForegroundDispatch(this, NfcDao.mPendingIntent, NfcDao.mIntentFilter, NfcDao.mTechList);
 
 
-        try {
-            String str = dao.readFromTag(getIntent());
-            String id = dao.readIdFromTag(getIntent());
-
-            Log.e("NFC--LEE", str + "--" + id);
-
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String str = dao.readFromTag(getIntent());
+//            String id = dao.readIdFromTag(getIntent());
+//
+//            Log.e("NFC--LEE", str + "--" + id);
+//
+//
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
 
 
     }

@@ -227,9 +227,11 @@ public class NfcDao {
             byte[] key11 = key1.getBytes();
             auth = mfc.authenticateSectorWithKeyA(SECTOR, key11);
 
+
             if (auth) {
                 for (int i = 0; i < bCount - 1; i++) {
                     byte[] bytes = mfc.readBlock(bIndex);
+
                     userInfo += hexStringToStr(ByteArrayToHexString(bytes)) + ":";
                     bIndex++;
                 }
@@ -251,6 +253,57 @@ public class NfcDao {
             }
         }
         return null;
+    }
+
+
+    /**
+     * @param intent
+     */
+    public static void writeUserInfo(Intent intent) {
+
+        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        if (tag == null) {
+            return ;
+        }
+        MifareClassic mfc = MifareClassic.get(tag);
+        boolean auth = false;
+        try {
+            mfc.connect();
+            String userInfo = "";
+            int bCount = mfc.getBlockCountInSector(SECTOR);//获得当前扇区的所包含块的数量；
+            int bIndex = mfc.sectorToBlock(SECTOR);//当前扇区的第1块的块号；
+            String key1 = "hdypdd";
+            byte[] key11 = key1.getBytes();
+            auth = mfc.authenticateSectorWithKeyA(SECTOR, key11);
+
+
+            if (auth) {
+                for (int i = 0; i < bCount - 1; i++) {
+                    // byte[] bytes = mfc.readBlock(bIndex);
+
+                    String sb = "ABCDEFGHIJKLMNOP";
+                    mfc.writeBlock(bIndex, sb.getBytes());
+
+                    //userInfo += hexStringToStr(ByteArrayToHexString(bytes)) + ":";
+                    bIndex++;
+                }
+            } else {
+                Log.e("LOG_TAG", "密码错误");
+            }
+
+            Log.e("LOG_TAG", userInfo);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (mfc != null) {
+                try {
+                    mfc.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+
     }
 
 
@@ -289,11 +342,11 @@ public class NfcDao {
             for (int i = 0; i < sectorCount; i++) {
                 //验证当前扇区的KeyA密码，返回值为ture或false。
 
-                String key1 = "hdypdd";
-                byte[] key11 = key1.getBytes();
+               // String key1 = "hdypdd";
+              //  byte[] key11 = key1.getBytes();
 
-                //auth = mfc.authenticateSectorWithKeyA(i, MifareClassic.KEY_DEFAULT);
-                auth = mfc.authenticateSectorWithKeyA(i, key11);
+                auth = mfc.authenticateSectorWithKeyA(i, MifareClassic.KEY_DEFAULT);
+                //auth = mfc.authenticateSectorWithKeyA(i, key11);
                 int bCount;
                 int bIndex;
                 if (auth) {
@@ -309,6 +362,82 @@ public class NfcDao {
                         //   Log.e("readTag", hexStringToStr(ByteArrayToHexString(bytes)));
                         // Log.e("readTag1", hexStringToStr(ByteArrayToHexString(bytes).replace("00", "")));
                         metaInfo += "Block " + bIndex + " : " + hexStringToStr(ByteArrayToHexString(bytes)) + "\n";
+                        bIndex++;
+                    }
+                } else {
+                    metaInfo += "Sector " + i + ":验证失败\n";
+                }
+            }
+            return metaInfo;
+        } catch (IOException e) {
+            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        } finally {
+            if (mfc != null) {
+                try {
+                    mfc.close();
+                } catch (IOException e) {
+                    // Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String weTag(Intent intent) {
+        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        if (tag == null) {
+            return "";
+        }
+        MifareClassic mfc = MifareClassic.get(tag);
+        boolean auth = false;
+        try {
+            mfc.connect();
+            String metaInfo = "";
+            int type = mfc.getType();//获取TAG的类型  获得MifareClassic标签的具体类型
+
+            int sectorCount = mfc.getSectorCount();//获取TAG中包含的扇区数
+            String types = "";
+            switch (type) {
+                case MifareClassic.TYPE_CLASSIC:
+                    types = "TYPE_CLASSIC";
+                    break;
+                case MifareClassic.TYPE_PLUS:
+                    types = "TYPE_PLUS";
+                    break;
+                case MifareClassic.TYPE_PRO:
+                    types = "TYPE_PRO";
+                    break;
+                case MifareClassic.TYPE_UNKNOWN:
+                    types = "TYPE_UNKNOWN";
+                    break;
+            }
+            //getBlockCount（）：获得标签总共有的的块数量；
+            metaInfo += "卡片类型：" + types + "\n共" + sectorCount + "个扇区\n共"
+                    + mfc.getBlockCount() + "个块\n存储空间: " + mfc.getSize()
+                    + "B\n";
+            for (int i = 0; i < sectorCount; i++) {
+                //验证当前扇区的KeyA密码，返回值为ture或false。
+
+                auth = mfc.authenticateSectorWithKeyA(i, MifareClassic.KEY_DEFAULT);
+                int bCount;
+                int bIndex;
+                if (auth) {
+                    metaInfo += "Sector " + i + ":验证成功\n";
+                    bCount = mfc.getBlockCountInSector(i);//获得当前扇区的所包含块的数量；
+                    bIndex = mfc.sectorToBlock(i);//当前扇区的第1块的块号；
+                    for (int j = 0; j < bCount; j++) {
+                        //读取当前块的数据。
+                        //byte[] bytes = mfc.readBlock(bIndex);
+                        //metaInfo += "Block " + bIndex + " : " + printHexBinary(bytes) + "\n";
+                        // bIndex++;
+
+                        //   Log.e("readTag", hexStringToStr(ByteArrayToHexString(bytes)));
+                        // Log.e("readTag1", hexStringToStr(ByteArrayToHexString(bytes).replace("00", "")));
+                        //metaInfo += "Block " + bIndex + " : " + hexStringToStr(ByteArrayToHexString(bytes)) + "\n";
+                        String v="abcdefghijklenop";
+                        mfc.writeBlock(bIndex, v.getBytes());
+
                         bIndex++;
                     }
                 } else {
