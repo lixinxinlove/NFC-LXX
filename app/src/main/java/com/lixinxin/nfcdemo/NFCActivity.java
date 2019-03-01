@@ -48,14 +48,15 @@ public class NFCActivity extends AppCompatActivity {
 
             //dao.weTag(intent);
             //dao.writeUserInfo(intent);
-            //data1 = dao.readUserInfo(intent);
+            data1 = dao.readUserInfo(intent);
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Log.e("NFCActivity", data1);
+        //Log.e("NFCActivity", data1);
+        Log.e("NFCActivity", data);
 
 
         //  Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
