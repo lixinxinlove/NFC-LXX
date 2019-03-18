@@ -56,7 +56,9 @@ public class NFCActivity extends AppCompatActivity {
         }
 
         //Log.e("NFCActivity", data1);
-        Log.e("NFCActivity", data);
+        if (data != null) {
+            Log.e("NFCActivity", data);
+        }
 
 
         //  Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
