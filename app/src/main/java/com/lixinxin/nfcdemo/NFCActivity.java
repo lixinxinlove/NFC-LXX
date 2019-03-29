@@ -77,7 +77,7 @@ public class NFCActivity extends AppCompatActivity {
         super.onResume();
 
         //开启前台调度系统
-        NfcDao.mNfcAdapter.enableForegroundDispatch(this, NfcDao.mPendingIntent, NfcDao.mIntentFilter, NfcDao.mTechList);
+       // NfcDao.mNfcAdapter.enableForegroundDispatch(this, NfcDao.mPendingIntent, NfcDao.mIntentFilter, NfcDao.mTechList);
 
 
 //        try {
@@ -101,7 +101,7 @@ public class NFCActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //关闭前台调度系统
-        NfcDao.mNfcAdapter.disableForegroundDispatch(this);
+       // NfcDao.mNfcAdapter.disableForegroundDispatch(this);
 
 
 //    public void onCheckNFC(View view) {
