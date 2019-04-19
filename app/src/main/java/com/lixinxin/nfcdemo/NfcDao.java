@@ -61,8 +61,7 @@ public class NfcDao {
      */
     public static void NfcInit(Activity activity) {
         mPendingIntent = PendingIntent.getActivity(activity, 0,
-                new Intent(activity, activity.getClass())
-                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                new Intent(activity, activity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         IntentFilter filter2 = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter filter3 = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
@@ -263,7 +262,7 @@ public class NfcDao {
 
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if (tag == null) {
-            return ;
+            return;
         }
         MifareClassic mfc = MifareClassic.get(tag);
         boolean auth = false;
@@ -341,11 +340,11 @@ public class NfcDao {
                     + "B\n";
             for (int i = 0; i < sectorCount; i++) {
                 //验证当前扇区的KeyA密码，返回值为ture或false。
-               // String key1 = "hdypdd";
-               // byte[] key11 = key1.getBytes();
+                String key1 = "hdypdd";
+                byte[] key11 = key1.getBytes();
 
-                auth = mfc.authenticateSectorWithKeyA(i, MifareClassic.KEY_DEFAULT);
-               // auth = mfc.authenticateSectorWithKeyA(i, key11);
+                //auth = mfc.authenticateSectorWithKeyA(i, MifareClassic.KEY_DEFAULT);
+                 auth = mfc.authenticateSectorWithKeyA(i, key11);
                 int bCount;
                 int bIndex;
                 if (auth) {
@@ -434,7 +433,7 @@ public class NfcDao {
                         //   Log.e("readTag", hexStringToStr(ByteArrayToHexString(bytes)));
                         // Log.e("readTag1", hexStringToStr(ByteArrayToHexString(bytes).replace("00", "")));
                         //metaInfo += "Block " + bIndex + " : " + hexStringToStr(ByteArrayToHexString(bytes)) + "\n";
-                        String v="abcdefghijklenop";
+                        String v = "abcdefghijklenop";
                         mfc.writeBlock(bIndex, v.getBytes());
 
                         bIndex++;

@@ -23,6 +23,7 @@ public class NFCActivity extends AppCompatActivity {
 
     private void initView() {
         mTvView = findViewById(R.id.tv);
+
     }
 
 
@@ -48,7 +49,7 @@ public class NFCActivity extends AppCompatActivity {
 
             //dao.weTag(intent);
             //dao.writeUserInfo(intent);
-            data1 = dao.readUserInfo(intent);
+            // data1 = dao.readUserInfo(intent);
 
 
         } catch (Exception e) {
@@ -65,6 +66,7 @@ public class NFCActivity extends AppCompatActivity {
         //  Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
         //  Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
         mTvView.setText(data);
+        //mTvView.setText(data1);
     }
 
     /**
@@ -77,7 +79,8 @@ public class NFCActivity extends AppCompatActivity {
         super.onResume();
 
         //开启前台调度系统
-       // NfcDao.mNfcAdapter.enableForegroundDispatch(this, NfcDao.mPendingIntent, NfcDao.mIntentFilter, NfcDao.mTechList);
+        NfcDao.mNfcAdapter.enableForegroundDispatch(this, NfcDao.mPendingIntent
+                , NfcDao.mIntentFilter, NfcDao.mTechList);
 
 
 //        try {
@@ -101,7 +104,7 @@ public class NFCActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //关闭前台调度系统
-       // NfcDao.mNfcAdapter.disableForegroundDispatch(this);
+        NfcDao.mNfcAdapter.disableForegroundDispatch(this);
 
 
 //    public void onCheckNFC(View view) {

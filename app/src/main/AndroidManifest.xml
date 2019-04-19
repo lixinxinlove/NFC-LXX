@@ -30,7 +30,7 @@
         <!--nfc-->
         <activity
             android:name=".NFCActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
